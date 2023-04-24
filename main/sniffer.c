@@ -24,6 +24,7 @@ typedef struct
 {
     char mac[13];
     int ttl;
+    int rssi;
     bool state;
     struct tm criado;
     struct tm offline;
@@ -98,6 +99,7 @@ void sniffer(void *buf, wifi_promiscuous_pkt_type_t type)
         if (compair_mac(devices[i].mac, mac))
         {
             devices[i].ttl = default_TTL;
+            devices[i].rssi = p->rx_ctrl.rssi;
             if (!devices[i].state)
             {
                 devices[i].state = true;
@@ -116,6 +118,7 @@ void sniffer(void *buf, wifi_promiscuous_pkt_type_t type)
         }
         devices[listcount].state = true;
         devices[listcount].ttl = default_TTL;
+        devices[listcount].rssi = p->rx_ctrl.rssi;
         ds1307_get_time(&dev, &devices[listcount].criado);
         listcount++;
 
@@ -179,8 +182,8 @@ void app_main(void)
 
         for (int i = 0; i < listcount; i++)
         {
-            printf("MAC: %s, TTL: %d, estado: %d, conectado em: %02d:%02d:%02d", devices[i].mac, devices[i].ttl,
-                   devices[i].state, devices[i].criado.tm_hour, devices[i].criado.tm_min, devices[i].criado.tm_sec);
+            printf("MAC: %s, TTL: %d, estado: %d, rssi: %d, conectado em: %02d:%02d:%02d", devices[i].mac, devices[i].ttl,
+                   devices[i].state, devices[i].rssi, devices[i].criado.tm_hour, devices[i].criado.tm_min, devices[i].criado.tm_sec);
             if (devices[i].state)
             {
                 printf(";\n");
