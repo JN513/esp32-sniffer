@@ -122,7 +122,7 @@ void sniffer(void *buf, wifi_promiscuous_pkt_type_t type)
         ds1307_get_time(&dev, &devices[listcount].criado);
         listcount++;
 
-        if (listcount == 256)
+        if (listcount == 255)
         {
             ESP_LOGI(TAG, "Lista completa");
             listcount = 0;
